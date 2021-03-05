@@ -1,3 +1,4 @@
+//const fs = require("fs");
 const ws = new WebSocket("ws://localhost:3000");
 
 ws.onmessage = (msg) => {
@@ -18,3 +19,13 @@ const handleSubmit = (evt) => {
 
 const form = document.getElementById("form");
 form.addEventListener("submit", handleSubmit);
+
+const date_string = () => {
+  let today = new Date();
+  let date =
+    today.getFullYear() + "_" + (today.getMonth() + 1) + "_" + today.getDate();
+  let time =
+    today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds();
+  let dateTime = date + "-" + time;
+  return dateTime;
+};
