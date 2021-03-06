@@ -7,7 +7,7 @@ const Message = require("../models/Message");
 /* GET messages . */
 router.get("/", function (req, res, next) {
   Message.findAll().then((messages) => {
-    console.log(messages);
+    //console.log(messages);
     res.send(messages);
   });
 });
@@ -37,10 +37,11 @@ router.post("/", function (req, res, next) {
   })
     .then((result) => {
       res.send(result);
+      webSoc.send(result["message"]);
     })
     .catch((result) => {
       console.log(result);
-      res.send(result.errors[0].message);
+      //res.send(result.errors[0].message);
     });
 });
 

@@ -1,7 +1,6 @@
 const WebSocket = require("ws");
-
 const clients = [];
-const messages = [];
+const Message = require("./models/Message");
 
 const wsConnection = (server) => {
   const wss = new WebSocket.Server({ server });
@@ -11,13 +10,30 @@ const wsConnection = (server) => {
     sendMessages();
 
     ws.on("message", (message) => {
-      messages.push(message);
+      var now = new Date();
+      Message.create({
+        message,
+        author: "Desde UI",
+        ts: now.getTime(),
+      })
+        .then((result) => {
+          console.log("Message saved");
+        })
+        .catch((result) => {
+          console.log(result);
+        });
       sendMessages();
     });
   });
 
   const sendMessages = () => {
-    clients.forEach((client) => client.send(JSON.stringify(messages)));
+    Message.findAll({ raw: true })
+      .then((messages) => {
+        //console.log(messages);
+        messages = messages.map((element) => element["message"]);
+        clients.forEach((client) => client.send(JSON.stringify(messages)));
+      })
+      .catch((error) => console.log(error));
   };
 };
 
